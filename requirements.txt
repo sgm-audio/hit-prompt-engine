@@ -34,4 +34,4 @@ dagster-webserver>=1.7.0
 python-dotenv>=1.0.0
 tenacity>=8.2.0              # Retry logic for API calls
 tqdm>=4.66.0                 # Progress bars
-pyyaml>=6.0.1
+pyyaml>=6.0.3
