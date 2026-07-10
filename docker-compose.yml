@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+
+  # ─── Hit Prompt Engine API ────────────────────────────────────────────────
+  app:
+    build: .
+    container_name: hit-prompt-engine
+    ports:
+      - "8000:8000"
+    environment:
+      HIT_ENGINE_DB: /data/hit_engine.db
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+      SPOTIFY_CLIENT_ID: ${SPOTIFY_CLIENT_ID}
+      SPOTIFY_CLIENT_SECRET: ${SPOTIFY_CLIENT_SECRET}
+    volumes:
+      - ./data:/data
+      - ./audio_cache:/audio_cache
+    command: python run_pipeline.py serve --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  # ─── Redis (task queue / caching) ─────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: hit-prompt-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # ─── Dagster webserver (optional orchestration UI) ────────────────────────
+  dagster:
+    build: .
+    container_name: hit-prompt-dagster
+    ports:
+      - "3000:3000"
+    environment:
+      HIT_ENGINE_DB: /data/hit_engine.db
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
+    volumes:
+      - ./data:/data
+    command: dagster-webserver -h 0.0.0.0 -p 3000 -f orchestration/dag_pipeline.py
+    restart: unless-stopped
+    profiles:
+      - orchestration   # Only starts when: docker compose --profile orchestration up
+
+volumes:
+  redis_data:

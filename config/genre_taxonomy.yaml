@@ -1,0 +1,93 @@
+# Canonical genre taxonomy — maps raw chart genres to normalized labels
+# Each entry includes Suno-safe style tags and compatible chart sources
+
+genres:
+  pop:
+    label: "Pop"
+    suno_tags: ["pop", "radio pop", "mainstream"]
+    charts: ["hot-100", "pop-songs", "adult-contemporary"]
+    eras: ["1980s", "1990s", "2000s", "2010s", "2020s", "2026"]
+
+  hip_hop:
+    label: "Hip-Hop"
+    suno_tags: ["hip-hop", "rap"]
+    charts: ["hot-100", "r-b-hip-hop-songs", "rap-songs"]
+    eras: ["1990s", "2000s", "2010s", "2020s"]
+
+  rnb:
+    label: "R&B"
+    suno_tags: ["R&B soul", "neo-soul", "contemporary R&B"]
+    charts: ["r-b-hip-hop-songs", "hot-100"]
+    eras: ["1980s", "1990s", "2000s", "2010s", "2020s"]
+
+  country:
+    label: "Country"
+    suno_tags: ["country", "country pop", "americana"]
+    charts: ["country-songs", "hot-100"]
+    eras: ["1976", "1980s", "1990s", "2000s", "2010s", "2020s"]
+
+  rock:
+    label: "Rock"
+    suno_tags: ["rock", "classic rock", "arena rock"]
+    charts: ["rock-songs", "hot-100", "alternative-songs"]
+    eras: ["1976", "1980s", "1990s", "2000s", "2010s"]
+
+  alternative:
+    label: "Alternative"
+    suno_tags: ["alternative rock", "indie rock", "grunge"]
+    charts: ["alternative-songs", "rock-songs"]
+    eras: ["1990s", "2000s", "2010s"]
+
+  electronic:
+    label: "Electronic/Dance"
+    suno_tags: ["electronic dance", "EDM", "house", "techno"]
+    charts: ["dance-electronic-songs", "hot-100"]
+    eras: ["1990s", "2000s", "2010s", "2020s"]
+
+  latin:
+    label: "Latin"
+    suno_tags: ["latin pop", "reggaeton", "salsa"]
+    charts: ["latin-songs", "hot-100"]
+    eras: ["2000s", "2010s", "2020s"]
+
+  gospel:
+    label: "Gospel"
+    suno_tags: ["gospel", "Christian contemporary", "praise"]
+    charts: ["gospel-songs"]
+    eras: ["1976", "1980s", "1990s", "2000s", "2010s", "2020s"]
+
+  reggae:
+    label: "Reggae"
+    suno_tags: ["reggae", "dancehall", "ska"]
+    charts: ["reggae-songs", "hot-100"]
+    eras: ["1976", "1980s", "1990s", "2000s", "2010s"]
+
+  kpop:
+    label: "K-Pop"
+    suno_tags: ["K-pop", "K-pop idol", "Korean pop"]
+    charts: ["k-pop", "hot-100"]
+    eras: ["2010s", "2020s"]
+
+  afrobeats:
+    label: "Afrobeats"
+    suno_tags: ["afrobeats", "afropop", "amapiano"]
+    charts: ["afrobeats", "hot-100"]
+    eras: ["2020s", "2026"]
+
+  jazz:
+    label: "Jazz"
+    suno_tags: ["jazz", "jazz fusion", "smooth jazz"]
+    charts: ["hot-100"]
+    eras: ["1976", "1980s", "1990s"]
+
+  folk:
+    label: "Folk/Americana"
+    suno_tags: ["folk acoustic", "americana", "singer-songwriter"]
+    charts: ["hot-100", "adult-contemporary"]
+    eras: ["1976", "1980s", "1990s", "2000s", "2010s"]
+
+  metal:
+    label: "Metal"
+    suno_tags: ["heavy metal", "thrash metal", "hard rock"]
+    charts: ["rock-songs", "hot-100"]
+    eras: ["1980s", "1990s", "2000s", "2010s"]

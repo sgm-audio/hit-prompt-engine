@@ -1,0 +1,38 @@
+# ─── Normalize line endings ────────────────────────────────────────────────────
+* text=auto eol=lf
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+*.py text diff=python
+*.pyi text diff=python
+*.pyw text
+
+# ─── Config / markup ──────────────────────────────────────────────────────────
+*.md text diff=markdown
+*.rst text
+*.yaml text
+*.yml text
+*.json text
+*.toml text
+*.ini text
+*.cfg text
+
+# ─── Shell scripts ────────────────────────────────────────────────────────────
+*.sh text eol=lf
+*.bash text eol=lf
+
+# ─── Docker ───────────────────────────────────────────────────────────────────
+Dockerfile text
+*.dockerfile text
+
+# ─── Binaries (never diff) ────────────────────────────────────────────────────
+*.db binary
+*.sqlite binary
+*.sqlite3 binary
+*.db-* binary
+*.so binary
+*.pyc binary
+__pycache__ binary
+
+# ─── Lockfiles ────────────────────────────────────────────────────────────────
+requirements.txt text
+package-lock.json -diff

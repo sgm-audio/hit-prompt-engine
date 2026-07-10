@@ -1,0 +1,5 @@
+# Default owner for all files
+* @scottmills306
+
+# CI/CD config requires explicit review
+.github/ @scottmills306

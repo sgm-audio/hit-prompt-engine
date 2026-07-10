@@ -1,0 +1,47 @@
+steps:
+  # 1. Build Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "build"
+      - "-t"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/sgm-docker/hit-prompt-engine:$COMMIT_SHA"
+      - "-t"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/sgm-docker/hit-prompt-engine:latest"
+      - "."
+
+  # 2. Push to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - "push"
+      - "--all-tags"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/sgm-docker/hit-prompt-engine"
+
+  # 3. Deploy API service to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "deploy"
+      - "hit-prompt-engine"
+      - "--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/sgm-docker/hit-prompt-engine:$COMMIT_SHA"
+      - "--region=${_REGION}"
+      - "--platform=managed"
+      - "--quiet"
+
+  # 4. Update Cloud Run Job image (pipeline batch runner)
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: "gcloud"
+    args:
+      - "run"
+      - "jobs"
+      - "update"
+      - "hit-engine-weekly-ingest"
+      - "--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/sgm-docker/hit-prompt-engine:$COMMIT_SHA"
+      - "--region=${_REGION}"
+
+substitutions:
+  _REGION: us-central1
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: "E2_HIGHCPU_8"

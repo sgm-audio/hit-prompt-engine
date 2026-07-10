@@ -1,0 +1,2 @@
+exclude: tests/
+skips: ['B101', 'B104', 'B110', 'B311']

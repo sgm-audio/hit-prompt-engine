@@ -1,0 +1,57 @@
+# ─── Environment & secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.cert
+
+# ─── Database ─────────────────────────────────────────────────────────────────
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+
+# ─── Build / runtime artifacts ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# ─── Audio cache (user-provided files) ────────────────────────────────────────
+audio_cache/
+data/raw_charts/
+data/prompt_packs/
+
+# ─── IDE / editor ─────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.kate-swp
+*.sublime-*
+
+# ─── OS / filesystem ──────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ─── Python tooling ──────────────────────────────────────────────────────────
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ─── Docker / infra ──────────────────────────────────────────────────────────
+.docker/
+
+# ─── Docs build ──────────────────────────────────────────────────────────────
+site/

@@ -1,0 +1,31 @@
+hit_definition:
+  charts_in_scope:
+    - hot-100                    # Main pop/multi-genre
+    - r-b-hip-hop-songs          # R&B / Hip-Hop
+    - country-songs              # Country
+    - pop-songs                  # Pop airplay
+    - rock-songs                 # Rock
+    - latin-songs                # Latin
+    - dance-electronic-songs     # Dance/Electronic
+    - rap-songs                  # Rap
+    - alternative-songs          # Alternative
+    - adult-contemporary         # AC
+    - gospel-songs               # Gospel
+    - reggae-songs               # Reggae
+    - k-pop                      # K-Pop (post 2010)
+    - afrobeats                  # Afrobeats (post 2020)
+
+  years_in_scope:
+    start: 1976
+    end: 2026
+
+  eligible_if_any:
+    - peak_position: {lte: 10}          # Top 10 hit on ANY chart
+    - weeks_on_chart: {gte: 20}         # Long-charting track
+    - year_end_list: true               # Billboard year-end list
+    - genre_chart_peak: {lte: 5}        # #1-5 on a genre chart
+
+  dedupe_key_priority:
+    - isrc                              # Best: exact
+    - mbid                              # MusicBrainz ID
+    - fuzzy_artist_title                # Fallback: 90% match

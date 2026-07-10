@@ -1,0 +1,75 @@
+# The 6 Variation Recipes — applied per track to generate prompt packs
+# Each recipe defines style modifier, lyrics tone, BPM delta, and intent
+
+variations:
+  - id: V1_faithful
+    name: "Faithful Essence"
+    intent: "Closest to the original feel, fully original composition"
+    style_mod: faithful
+    lyrics_mod: faithful
+    instrumental: false
+    bpm_delta: 0
+    priority: 1
+    description: >
+      Preserves the sonic DNA — genre, era, energy, vocal style — of the source track.
+      Best for capturing what made the hit work without copying it.
+
+  - id: V2_modern_2026
+    name: "Modern Radio 2026"
+    intent: "Updated mix, contemporary drum palette, streaming-ready"
+    style_mod: modern_2026
+    lyrics_mod: modern_2026
+    instrumental: false
+    bpm_delta: 2
+    priority: 2
+    description: >
+      Takes the core emotional arc and updates it with 2026 production aesthetics.
+      Sidechain, trap-influenced percussion, spatial audio clarity.
+
+  - id: V3_genre_bent
+    name: "Genre-Bent"
+    intent: "Cross-genre surprise — same emotional arc, different sonic world"
+    style_mod: genre_bent
+    lyrics_mod: faithful
+    instrumental: false
+    bpm_delta: 0
+    priority: 3
+    description: >
+      Unexpected genre fusion. A country hit reborn as afrobeats. A pop anthem
+      as dark ambient. Preserves emotional arc; completely reinvents production.
+
+  - id: V4_stripped
+    name: "Stripped Acoustic"
+    intent: "Minimal, intimate, acoustic-leaning version"
+    style_mod: stripped
+    lyrics_mod: stripped
+    instrumental: false
+    bpm_delta: -8
+    priority: 4
+    description: >
+      Reduces the arrangement to its emotional core. Acoustic instruments,
+      close-mic vocal, natural room sound. Great for sync and streaming placement.
+
+  - id: V5_instrumental
+    name: "Instrumental Sync"
+    intent: "Clean instrumental for sync licensing / creators"
+    style_mod: instrumental
+    lyrics_mod: instrumental
+    instrumental: true
+    bpm_delta: 0
+    priority: 5
+    description: >
+      Full production minus the vocal. Optimized for sync licensing, YouTube B-roll,
+      and creator background music. Includes brief outro fade.
+
+  - id: V6_club_remix
+    name: "Club Remix"
+    intent: "Extended build/drop, DJ-friendly, peak energy"
+    style_mod: club_remix
+    lyrics_mod: club_remix
+    instrumental: false
+    bpm_delta: 10
+    priority: 6
+    description: >
+      Extends to DJ-friendly format. Four-on-the-floor kick, extended intro,
+      breakdown before drop, crowd-primed hook. 128+ BPM target.
