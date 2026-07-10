@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Hit Prompt Engine API",
-    version="1.0.0",
+    version="0.1.1",
     description="Suno prompt packs generated from 50 years of chart DNA",
     lifespan=lifespan,
 )

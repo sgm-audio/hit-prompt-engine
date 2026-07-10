@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.1.1] - 2026-07-10
+
+### Fixed
+
+- `billboard_puller.ingest_date_range` signature now matches callers (accepts `db_path`, `start_date`, `end_date`, `charts` and writes to DB directly)
+- `dag_pipeline.db_initialized` passes path string to `init_db` instead of connection object
+- `dag_pipeline.spotify_enriched` calls `enrich_with_features` synchronously (was wrapped in `asyncio.run`)
+- `run_pipeline.run_phase1` calls `enrich_with_features` without `await` (sync function)
+- `run_pipeline.run_phase2` guards against `None` return from `analyze_audio`
+- `dag_pipeline.audio_dna_extracted` guards against `None` return from `analyze_audio`
+- `enrich_catalog` and `enrich_with_features` now return `int` counts
+- All ruff lint and format issues resolved
+- All mypy type errors resolved in 26 source files
+
 ### Added
 
 - Initial public release
