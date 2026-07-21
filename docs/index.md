@@ -24,4 +24,4 @@ Writing these by hand for bulk creation is tedious and inconsistent. This engine
 - [Getting Started](getting-started.md)
 - [Architecture](architecture.md)
 - [API Reference](api.md)
-- [GitHub Repository](https://github.com/scottmills306/hit-prompt-engine)
+- [GitHub Repository](https://github.com/sgm-audio/hit-prompt-engine)
