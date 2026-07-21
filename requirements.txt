@@ -21,6 +21,7 @@ panns-inference>=0.1.1       # AudioSet 527-label classifier
 # ─── API server ───────────────────────────────────────────────────────────────
 fastapi>=0.111.0
 uvicorn[standard]>=0.29.0
+sentry-sdk[fastapi]>=2.0.0
 
 # ─── DB (optional SQLAlchemy upgrade path) ────────────────────────────────────
 sqlalchemy>=2.0.0

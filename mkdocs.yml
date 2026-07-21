@@ -1,7 +1,7 @@
 site_name: Hit Prompt Engine
 site_description: Turn 50 years of Billboard chart history into Suno-optimized prompt packs
-site_url: https://scottmills306.github.io/hit-prompt-engine
-repo_url: https://github.com/scottmills306/hit-prompt-engine
+site_url: https://sgm-audio.github.io/hit-prompt-engine
+repo_url: https://github.com/sgm-audio/hit-prompt-engine
 edit_uri: blob/main/docs/
 
 theme:
