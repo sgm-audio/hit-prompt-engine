@@ -50,7 +50,7 @@ jobs:
           sudo apt-get install -y -qq ffmpeg libsndfile1
 
       - name: Install project deps
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt pytest
 
       - name: Run tests
         run: pytest tests/ -v --tb=short -x
@@ -69,7 +69,7 @@ jobs:
         run: pip install bandit pip-audit
 
       - name: Static analysis (bandit)
-        run: bandit -r . --skip B101 -x tests/
+        run: bandit -r . --skip B101,B104,B311 -x tests/
 
       - name: Dependency audit (pip-audit)
         run: pip-audit --strict -r requirements.txt

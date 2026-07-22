@@ -65,7 +65,7 @@ async def run_phase1(start: str, end: str, charts: list[str] | None = None) -> N
 
     # 4. Spotify audio features
     log.info("Enriching with Spotify audio features...")
-    await enrich_with_features(db_path=DB_PATH)
+    enrich_with_features(db_path=DB_PATH)
 
     log.info("Phase 1 complete.")
 
@@ -146,11 +146,15 @@ def run_phase2(
                 analysis = analyze_audio(str(audio_file))
                 features = extract_features(str(audio_file))
 
-                structure = json.dumps(analysis.structure)
-                energy_curve = json.dumps(analysis.energy_curve)
-                instrumentation = json.dumps(features.instrumentation[:5])
-                production_tags = json.dumps(features.production_tags[:4])
-                updated += 1
+                if analysis is None:
+                    log.warning(f"  Audio analysis returned None for {track_id}")
+                    skipped += 1
+                else:
+                    structure = json.dumps(analysis.structure)
+                    energy_curve = json.dumps(analysis.energy_curve)
+                    instrumentation = json.dumps(features.instrumentation[:5])
+                    production_tags = json.dumps(features.production_tags[:4])
+                    updated += 1
             except Exception as exc:
                 log.warning(f"  Audio analysis failed for {track_id}: {exc}")
                 skipped += 1
