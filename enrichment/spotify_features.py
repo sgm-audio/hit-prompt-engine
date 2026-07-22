@@ -181,6 +181,7 @@ def enrich_with_features(
     ).fetchone()[0]
     print(f"\n✅ Spotify features done: {enriched:,} tracks enriched")
     conn.close()
+    return enriched
 
 
 if __name__ == "__main__":

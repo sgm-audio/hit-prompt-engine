@@ -7,8 +7,10 @@ Two data sources:
   - Genre charts: RapidAPI Billboard Charts API (paid, optional)
 """
 
+import os
 import httpx
 import json
+import sqlite3
 import asyncio
 from datetime import date, timedelta
 from typing import Generator, Optional
@@ -117,13 +119,22 @@ def normalize_rapidapi_entry(raw: dict, chart_date: date, chart_name: str) -> di
 
 
 async def ingest_date_range(
-    start: date,
-    end: date,
+    db_path: str,
+    start_date: str,
+    end_date: str,
+    charts: list[str] | None = None,
     output_dir: str = "data/raw_charts",
-    api_key: Optional[str] = None,
 ):
-    """Main ingestion loop — pulls all weeks across all charts."""
+    """Main ingestion loop — pulls all weeks across all charts and writes to DB."""
+    from ingestion.deduper import upsert_track
+
+    start = date.fromisoformat(start_date)
+    end = date.fromisoformat(end_date)
+    chart_list = charts or ["hot-100"]
+    api_key: Optional[str] = os.environ.get("RAPIDAPI_KEY")
+
     Path(output_dir).mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(db_path)
 
     async with httpx.AsyncClient() as client:
         for week in week_generator(start, end):
@@ -137,45 +148,76 @@ async def ingest_date_range(
             weekly_data: dict = {"date": week_str, "charts": {}}
 
             # Hot-100 (free)
-            try:
-                hot100 = await fetch_hot100_week(client, week)
-                weekly_data["charts"]["hot-100"] = [
-                    normalize_hot100_entry(e, week, "hot-100")
-                    for e in hot100.get("data", [])
-                ]
-            except Exception as e:
-                print(f"[WARN] Hot-100 failed for {week_str}: {e}")
+            if "hot-100" in chart_list:
+                try:
+                    hot100 = await fetch_hot100_week(client, week)
+                    entries = hot100.get("data", [])
+                    for e in entries:
+                        entry = normalize_hot100_entry(e, week, "hot-100")
+                        upsert_track(
+                            conn,
+                            title=entry["title"],
+                            artist=entry["artist"],
+                            chart="hot-100",
+                            chart_date=week_str,
+                            rank=entry["rank"],
+                            peak_position=entry["peak_position"],
+                            weeks_on_chart=entry["weeks_on_chart"],
+                        )
+                    weekly_data["charts"]["hot-100"] = [
+                        normalize_hot100_entry(e, week, "hot-100") for e in entries
+                    ]
+                except Exception as exc:
+                    print(f"[WARN] Hot-100 failed for {week_str}: {exc}")
 
             # Genre charts (paid, optional)
             if api_key:
-                for genre_chart in GENRE_CHARTS[1:]:  # Skip hot-100, already pulled
+                for genre_chart in chart_list:
+                    if genre_chart == "hot-100":
+                        continue
                     try:
                         raw = await fetch_genre_chart(
                             client, genre_chart, week, api_key
                         )
                         entries = raw.get("content", raw.get("entries", []))
+                        for entry_raw in entries:
+                            entry = normalize_rapidapi_entry(
+                                entry_raw, week, genre_chart
+                            )
+                            upsert_track(
+                                conn,
+                                title=entry["title"],
+                                artist=entry["artist"],
+                                chart=genre_chart,
+                                chart_date=week_str,
+                                rank=entry["rank"],
+                                peak_position=entry["peak_position"],
+                                weeks_on_chart=entry["weeks_on_chart"],
+                            )
                         weekly_data["charts"][genre_chart] = [
-                            normalize_rapidapi_entry(e, week, genre_chart)
-                            for e in entries
+                            normalize_rapidapi_entry(entry_raw, week, genre_chart)
+                            for entry_raw in entries
                         ]
                         await asyncio.sleep(0.2)  # Respect rate limits
-                    except Exception as e:
-                        print(f"[WARN] {genre_chart} failed for {week_str}: {e}")
+                    except Exception as exc:
+                        print(f"[WARN] {genre_chart} failed for {week_str}: {exc}")
 
-            # Save week
+            # Save week (backup JSON)
             with open(out_file, "w") as f:
                 json.dump(weekly_data, f, indent=2)
             print(f"[OK] Ingested {week_str}")
 
             await asyncio.sleep(0.1)  # Polite crawl pace
 
+    conn.close()
+
 
 if __name__ == "__main__":
     asyncio.run(
         ingest_date_range(
-            start=date(1976, 1, 3),
-            end=date(2026, 3, 15),
-            output_dir="data/raw_charts",
-            api_key=None,  # Plug in RapidAPI key for genre charts
+            db_path="hit_engine.db",
+            start_date="1976-01-03",
+            end_date="2026-03-15",
+            charts=["hot-100"],
         )
     )
