@@ -51,9 +51,7 @@ class Phase2Config(Config):
 def db_initialized(context: AssetExecutionContext) -> None:
     from ingestion.deduper import init_db
 
-    conn = sqlite3.connect(DB_PATH)
-    init_db(conn)
-    conn.close()
+    init_db(DB_PATH)
     context.log.info(f"DB ready: {DB_PATH}")
 
 
@@ -69,7 +67,7 @@ def billboard_ingested(context: AssetExecutionContext, config: Phase1Config) -> 
         f"Ingesting {charts} from {config.start_date} to {config.end_date}"
     )
 
-    result = asyncio.run(
+    asyncio.run(
         ingest_date_range(
             db_path=DB_PATH,
             start_date=config.start_date,
@@ -77,8 +75,12 @@ def billboard_ingested(context: AssetExecutionContext, config: Phase1Config) -> 
             charts=charts,
         )
     )
-    context.log.info(f"Ingested {result} chart entries")
-    return result
+
+    conn = sqlite3.connect(DB_PATH)
+    count = conn.execute("SELECT COUNT(*) FROM tracks").fetchone()[0]
+    conn.close()
+    context.log.info(f"Ingested chart data — {count} tracks in catalog")
+    return count
 
 
 @asset(
@@ -100,7 +102,7 @@ def musicbrainz_enriched(context: AssetExecutionContext) -> int:
 def spotify_enriched(context: AssetExecutionContext) -> int:
     from enrichment.spotify_features import enrich_with_features
 
-    count = asyncio.run(enrich_with_features(db_path=DB_PATH))
+    count = enrich_with_features(db_path=DB_PATH)
     context.log.info(f"Spotify enriched: {count} tracks")
     return count
 
@@ -152,11 +154,16 @@ def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) ->
                 try:
                     analysis = analyze_audio(str(audio_file))
                     features = extract_features(str(audio_file))
-                    structure = json.dumps(analysis.structure)
-                    energy_curve = json.dumps(analysis.energy_curve)
-                    instrumentation = json.dumps(features.instrumentation[:5])
-                    production_tags = json.dumps(features.production_tags[:4])
-                    updated += 1
+                    if analysis is not None:
+                        structure = json.dumps(analysis.structure)
+                        energy_curve = json.dumps(analysis.energy_curve)
+                        instrumentation = json.dumps(features.instrumentation[:5])
+                        production_tags = json.dumps(features.production_tags[:4])
+                        updated += 1
+                    else:
+                        context.log.warning(
+                            f"Audio analysis returned None for {track_id}"
+                        )
                 except Exception as exc:
                     context.log.warning(f"Audio analysis failed for {track_id}: {exc}")
                 break
