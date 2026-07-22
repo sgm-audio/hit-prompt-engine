@@ -3,7 +3,7 @@
 ## Getting started
 
 ```bash
-git clone https://github.com/scottmills306/hit-prompt-engine
+git clone https://github.com/sgm-audio/hit-prompt-engine
 cd hit-prompt-engine
 cp .env.example .env
 pip install -r requirements.txt

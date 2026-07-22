@@ -33,6 +33,18 @@ from dna.dna_schema import TrackDNA
 # ─── Config ───────────────────────────────────────────────────────────────────
 
 DB_PATH = os.environ.get("HIT_ENGINE_DB", "hit_engine.db")
+SENTRY_DSN = os.environ.get("SENTRY_DSN", "").strip()
+
+if SENTRY_DSN:
+    import sentry_sdk
+    from sentry_sdk.integrations.fastapi import FastApiIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[FastApiIntegration()],
+        traces_sample_rate=float(os.environ.get("SENTRY_TRACES_SAMPLE_RATE", "0.1")),
+        environment=os.environ.get("ENVIRONMENT", "development"),
+    )
 
 
 # ─── Lifespan ─────────────────────────────────────────────────────────────────
@@ -46,7 +58,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Hit Prompt Engine API",
-    version="1.0.0",
+    version="0.1.1",
     description="Suno prompt packs generated from 50 years of chart DNA",
     lifespan=lifespan,
 )
