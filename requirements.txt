@@ -24,7 +24,7 @@ uvicorn[standard]>=0.29.0
 sentry-sdk[fastapi]>=2.0.0
 
 # ─── DB (optional SQLAlchemy upgrade path) ────────────────────────────────────
-sqlalchemy>=2.0.0
+sqlalchemy>=2.0.51
 alembic>=1.13.0
 
 # ─── Orchestration (optional) ─────────────────────────────────────────────────
