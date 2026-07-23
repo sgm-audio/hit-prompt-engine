@@ -157,6 +157,7 @@ def enrich_catalog(
     ).fetchone()[0]
     print(f"\n✅ Enrichment complete: {enriched_count:,} tracks enriched")
     conn.close()
+    return enriched_count
 
 
 if __name__ == "__main__":

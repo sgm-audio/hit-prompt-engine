@@ -4,16 +4,16 @@
 
 ---
 
-## Broken Integration Points (must fix before orchestration works)
+## Previously Broken Integration Points (fixed in v0.1.0)
 
-| Caller | Callee | Mismatch |
-|--------|--------|----------|
-| `run_pipeline.py:run_phase1` → `ingestion.billboard_puller.ingest_date_range` | `ingest_date_range(db_path, start_date, end_date, charts)` | Actual sig: `ingest_date_range(start: date, end: date, output_dir: str, api_key: str)` |
-| `orchestration/dag_pipeline.py:billboard_ingested` → same | same | same |
-| `orchestration/dag_pipeline.py:spotify_enriched` → `enrichment.spotify_features.enrich_with_features` | `asyncio.run(enrich_with_features(db_path=DB_PATH))` | Actual: **sync** function `enrich_with_features(db_path, batch_size)` — not awaitable |
-| `orchestration/dag_pipeline.py:db_initialized` → `ingestion.deduper.init_db` | `init_db(conn)` where `conn = sqlite3.connect(DB_PATH)` | Actual: `init_db(db_path: str)` — expects path string, calls `sqlite3.connect()` internally |
+All four signature mismatches between callers and callees have been fixed:
 
-**Fix order:** Update `billboard_puller.ingest_date_range` to accept `db_path, start_date, end_date, charts` and write to DB (not JSON files). Make `spotify_features.enrich_with_features` async or call without `asyncio.run`. Fix `dag_pipeline.py` to pass path string to `init_db`.
+| File | Fix |
+|------|-----|
+| `ingestion/billboard_puller.py` | `ingest_date_range` now accepts `(db_path, start_date, end_date, charts)` and writes to DB |
+| `orchestration/dag_pipeline.py` | `init_db(DB_PATH)` — passes string, not connection; `enrich_with_features` called directly (sync) |
+| `enrichment/musicbrainz_enricher.py` | `enrich_catalog` now returns `int` count |
+| `enrichment/spotify_features.py` | `enrich_with_features` now returns `int` count |
 
 ---
 

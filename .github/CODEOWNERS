@@ -1,5 +1,5 @@
 # Default owner for all files
-* @scottmills306
+* @sgm-audio
 
 # CI/CD config requires explicit review
-.github/ @scottmills306
+.github/ @sgm-audio

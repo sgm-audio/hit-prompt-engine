@@ -1,10 +1,10 @@
 # Hit Prompt Engine
 
-[![CI](https://github.com/scottmills306/hit-prompt-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/scottmills306/hit-prompt-engine/actions/workflows/ci.yml)
+[![CI](https://github.com/sgm-audio/hit-prompt-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/sgm-audio/hit-prompt-engine/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Docs](https://img.shields.io/badge/docs-github--pages-blueviolet)](https://scottmills306.github.io/hit-prompt-engine)
+[![Docs](https://img.shields.io/badge/docs-github--pages-blueviolet)](https://sgm-audio.github.io/hit-prompt-engine)
 
 A data pipeline that turns 50 years of Billboard chart history into Suno-optimized prompt packs — copyright-safe, DNA-driven, six variations per track.
 
