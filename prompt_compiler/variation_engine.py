@@ -10,16 +10,16 @@ from __future__ import annotations
 
 import copy
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 
-from prompt_compiler.style_builder import build_style_prompt
 from prompt_compiler.lyrics_builder import build_lyrics_block
+from prompt_compiler.style_builder import build_style_prompt
 
 if TYPE_CHECKING:
     from dna.dna_schema import TrackDNA
 
 
-VARIATION_RECIPES: List[Dict] = [
+VARIATION_RECIPES: list[dict] = [
     {
         "id": "V1_faithful",
         "name": "Faithful Essence",
@@ -86,13 +86,13 @@ class PromptPack:
     style: str
     lyrics: str
     instrumental: bool
-    settings: Dict = field(default_factory=dict)
-    lint: Dict = field(default_factory=dict)
+    settings: dict = field(default_factory=dict)
+    lint: dict = field(default_factory=dict)
 
 
-def generate_prompt_pack(dna: "TrackDNA") -> List[PromptPack]:
+def generate_prompt_pack(dna: TrackDNA) -> list[PromptPack]:
     """Generate all 6 variation packs for a TrackDNA."""
-    packs: List[PromptPack] = []
+    packs: list[PromptPack] = []
 
     for recipe in VARIATION_RECIPES:
         # Apply BPM delta to a copy of the DNA
@@ -124,7 +124,7 @@ def generate_prompt_pack(dna: "TrackDNA") -> List[PromptPack]:
     return packs
 
 
-def export_prompt_pack_json(dna: "TrackDNA") -> dict:
+def export_prompt_pack_json(dna: TrackDNA) -> dict:
     """Export all 6 variations as a clean JSON-serializable dict."""
     packs = generate_prompt_pack(dna)
     return {

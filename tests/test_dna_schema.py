@@ -6,6 +6,7 @@ Covers: computed helpers, field validation, defaults.
 """
 
 import pytest
+
 from dna.dna_schema import TrackDNA
 
 

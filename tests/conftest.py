@@ -2,13 +2,13 @@
 tests/conftest.py — Shared pytest fixtures for hit-prompt-engine.
 """
 
-import pytest
+import os
 import sqlite3
 import tempfile
-import os
+
+import pytest
 
 from dna.dna_schema import TrackDNA
-
 
 # ─── TrackDNA fixtures ────────────────────────────────────────────────────────
 

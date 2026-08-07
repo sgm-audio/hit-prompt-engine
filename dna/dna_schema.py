@@ -6,8 +6,8 @@ the entire pipeline. Phase 1 fields populate from chart metadata + MusicBrainz.
 Phase 2 fields populate from Spotify audio features + deep audio analysis.
 """
 
+
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict
 
 
 class TrackDNA(BaseModel):
@@ -16,23 +16,23 @@ class TrackDNA(BaseModel):
     title: str
     artist: str  # Internal use only — NEVER injected into Suno prompts
     release_year: int
-    genres: List[str] = Field(default_factory=list)
-    mbid: Optional[str] = None
-    isrc: Optional[str] = None
-    spotify_id: Optional[str] = None
+    genres: list[str] = Field(default_factory=list)
+    mbid: str | None = None
+    isrc: str | None = None
+    spotify_id: str | None = None
 
     # ── Phase 2: Spotify Extended Features ────────────────────────────────────
-    bpm: Optional[float] = None  # Precise tempo (e.g., 118.3)
-    key: Optional[str] = None  # e.g., "F# minor"
-    mode: Optional[str] = None  # "major" / "minor"
-    energy: Optional[float] = None  # 0.0–1.0
-    valence: Optional[float] = None  # Mood: sad (0.0) → happy (1.0)
-    danceability: Optional[float] = None  # 0.0–1.0
-    acousticness: Optional[float] = None  # 0.0–1.0
-    instrumentalness: Optional[float] = None
+    bpm: float | None = None  # Precise tempo (e.g., 118.3)
+    key: str | None = None  # e.g., "F# minor"
+    mode: str | None = None  # "major" / "minor"
+    energy: float | None = None  # 0.0–1.0
+    valence: float | None = None  # Mood: sad (0.0) → happy (1.0)
+    danceability: float | None = None  # 0.0–1.0
+    acousticness: float | None = None  # 0.0–1.0
+    instrumentalness: float | None = None
 
     # ── Phase 2: Deep Audio Analysis (from preview) ───────────────────────────
-    structure: List[str] = Field(
+    structure: list[str] = Field(
         default_factory=lambda: [
             "intro",
             "verse",
@@ -44,24 +44,24 @@ class TrackDNA(BaseModel):
             "outro",
         ]
     )
-    energy_curve: Dict[str, float] = Field(
+    energy_curve: dict[str, float] = Field(
         default_factory=dict
     )  # section → energy level
-    instrumentation: List[str] = Field(
+    instrumentation: list[str] = Field(
         default_factory=list
     )  # e.g., ["808", "funky_bass", "synth_pad"]
-    production_tags: List[str] = Field(
+    production_tags: list[str] = Field(
         default_factory=list
     )  # e.g., ["gated_reverb", "sidechain"]
-    vocal_profile: Optional[str] = (
+    vocal_profile: str | None = (
         None  # "male_lead", "female_harmony", "rap", "layered"
     )
 
     # ── Safe Inference ────────────────────────────────────────────────────────
-    lyric_themes: List[str] = Field(
+    lyric_themes: list[str] = Field(
         default_factory=list
     )  # ["confidence", "heartbreak", "nightlife"]
-    uniqueness_hooks: List[str] = Field(
+    uniqueness_hooks: list[str] = Field(
         default_factory=list
     )  # ["iconic_bassline_feel", "syncopated_rhythm"]
 
@@ -83,8 +83,8 @@ class TrackDNA(BaseModel):
             return "mid"
         return "low"
 
-    def bpm_int(self) -> Optional[int]:
-        return int(round(self.bpm)) if self.bpm else None
+    def bpm_int(self) -> int | None:
+        return round(self.bpm) if self.bpm else None
 
     def era(self) -> str:
         """Return decade-era string from release year."""

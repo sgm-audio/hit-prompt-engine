@@ -22,13 +22,13 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from prompt_compiler.prompt_linter import lint_prompt
 
 if TYPE_CHECKING:
-    from prompt_compiler.variation_engine import PromptPack
     from dna.dna_schema import TrackDNA
+    from prompt_compiler.variation_engine import PromptPack
 
 
 # ─── Score Result ─────────────────────────────────────────────────────────────
@@ -38,9 +38,9 @@ if TYPE_CHECKING:
 class ScoreResult:
     total: int  # 0–100
     grade: str  # A / B / C / D / F
-    dimensions: Dict[str, int]  # per-dimension scores
-    flags: List[str] = field(default_factory=list)
-    suggestions: List[str] = field(default_factory=list)
+    dimensions: dict[str, int]  # per-dimension scores
+    flags: list[str] = field(default_factory=list)
+    suggestions: list[str] = field(default_factory=list)
 
     def as_dict(self) -> dict:
         return {
@@ -81,7 +81,7 @@ RHYME_INDICATORS = [
 ]
 
 
-def _score_structure(pack: "PromptPack", target_structure: List[str]) -> int:
+def _score_structure(pack: PromptPack, target_structure: list[str]) -> int:
     """
     40 pts: Did the generated lyrics include all requested sections?
     Deduct 5 pts per missing section (max 40).
@@ -98,7 +98,7 @@ def _score_structure(pack: "PromptPack", target_structure: List[str]) -> int:
     return min(40, int(ratio * 40))
 
 
-def _score_tempo(detected_bpm: Optional[int], target_bpm: Optional[int]) -> int:
+def _score_tempo(detected_bpm: int | None, target_bpm: int | None) -> int:
     """
     20 pts: BPM accuracy.
     0 diff → 20, ±5 → 15, ±10 → 10, ±15 → 5, >15 → 0.
@@ -156,13 +156,13 @@ def _score_prosody(lyrics: str) -> int:
     return min(20, score)
 
 
-def _score_style_quality(pack: "PromptPack") -> int:
+def _score_style_quality(pack: PromptPack) -> int:
     """10 pts: Pass-through from prompt linter score."""
     result = lint_prompt(pack.style, pack.lyrics, instrumental=pack.instrumental)
     return int(result.score * 10)
 
 
-def _score_thematic_coherence(packs: List["PromptPack"], dna: "TrackDNA") -> int:
+def _score_thematic_coherence(packs: list[PromptPack], dna: TrackDNA) -> int:
     """
     10 pts: Do all variations reference the same thematic territory?
     Check theme keywords appear consistently across lyrics.
@@ -204,9 +204,9 @@ def _letter_grade(total: int) -> str:
 
 
 def score_pack(
-    pack: "PromptPack",
-    dna: "TrackDNA",
-    all_packs: Optional[List["PromptPack"]] = None,
+    pack: PromptPack,
+    dna: TrackDNA,
+    all_packs: list[PromptPack] | None = None,
 ) -> ScoreResult:
     """
     Score a single PromptPack against its source TrackDNA blueprint.
@@ -230,8 +230,8 @@ def score_pack(
 
     total = dim_structure + dim_tempo + dim_prosody + dim_style + dim_theme
 
-    flags: List[str] = []
-    suggestions: List[str] = []
+    flags: list[str] = []
+    suggestions: list[str] = []
 
     if dim_structure < 24:
         flags.append("Missing key structural sections")
@@ -264,7 +264,7 @@ def score_pack(
 
 
 def score_all_packs(
-    packs: List["PromptPack"], dna: "TrackDNA"
-) -> Dict[str, ScoreResult]:
+    packs: list[PromptPack], dna: TrackDNA
+) -> dict[str, ScoreResult]:
     """Score all 6 variations. Returns {variation_id: ScoreResult}."""
     return {pack.variation_id: score_pack(pack, dna, all_packs=packs) for pack in packs}

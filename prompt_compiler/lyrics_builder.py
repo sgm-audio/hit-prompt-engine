@@ -10,7 +10,8 @@ Producer cues in (parentheses) guide delivery and feel.
 """
 
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
+
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from dna.dna_schema import TrackDNA
@@ -89,7 +90,7 @@ DELIVERY_CUES: dict[str, str] = {
 # ─── Main Builder ─────────────────────────────────────────────────────────────
 
 
-def build_lyrics_block(dna: "TrackDNA", variation: str = "faithful") -> str:
+def build_lyrics_block(dna: TrackDNA, variation: str = "faithful") -> str:
     """
     Builds a structured lyric scaffold for Suno Custom Mode.
     - Uses [Section] tags for structural control
@@ -113,7 +114,7 @@ def build_lyrics_block(dna: "TrackDNA", variation: str = "faithful") -> str:
 
     # Gather theme seeds
     themes = dna.lyric_themes or ["emotion", "storytelling"]
-    seed_lines: List[str] = []
+    seed_lines: list[str] = []
     for theme in themes[:2]:
         seeds = THEME_SEEDS.get(theme, ["raw emotion, vivid imagery"])
         seed_lines.extend(seeds[:1])
@@ -124,7 +125,7 @@ def build_lyrics_block(dna: "TrackDNA", variation: str = "faithful") -> str:
     hook_line = seed_lines[-1] if seed_lines else "the emotional peak of the song"
 
     # Build block
-    lines: List[str] = [
+    lines: list[str] = [
         f"(Theme direction: {theme_direction})",
         f"(Delivery: {delivery_cue})",
         "",

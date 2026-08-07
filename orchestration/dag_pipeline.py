@@ -12,19 +12,19 @@ Or via docker compose --profile orchestration up
 
 from __future__ import annotations
 
+import asyncio
 import os
 import sqlite3
-import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 
 from dagster import (
     AssetExecutionContext,
+    Config,
     Definitions,
     RunConfig,
     ScheduleDefinition,
     asset,
     define_asset_job,
-    Config,
 )
 
 DB_PATH = os.environ.get("HIT_ENGINE_DB", "hit_engine.db")
@@ -113,10 +113,11 @@ def spotify_enriched(context: AssetExecutionContext) -> int:
 )
 def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) -> int:
     import json
+    from pathlib import Path
+
     from dna.audio_analyzer import analyze_audio
     from dna.feature_extractor import extract_features
     from dna.theme_extractor import infer_themes
-    from pathlib import Path
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -164,7 +165,7 @@ def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) ->
                         context.log.warning(
                             f"Audio analysis returned None for {track_id}"
                         )
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001
                     context.log.warning(f"Audio analysis failed for {track_id}: {exc}")
                 break
 
@@ -196,9 +197,10 @@ def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) ->
 )
 def prompts_compiled(context: AssetExecutionContext) -> int:
     import json
+
     from dna.dna_schema import TrackDNA
-    from prompt_compiler.variation_engine import export_prompt_pack_json
     from prompt_compiler.prompt_linter import lint_prompt
+    from prompt_compiler.variation_engine import export_prompt_pack_json
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -239,7 +241,7 @@ def prompts_compiled(context: AssetExecutionContext) -> int:
             if passing < 4:
                 lint_failures += 1
             compiled += 1
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             context.log.warning(f"Compile failed for {d.get('track_id')}: {exc}")
 
     conn.close()
@@ -281,8 +283,8 @@ weekly_ingestion = ScheduleDefinition(
     run_config=RunConfig(
         ops={
             "billboard_ingested": Phase1Config(
-                start_date=datetime.utcnow().strftime("%Y-%m-%d"),
-                end_date=datetime.utcnow().strftime("%Y-%m-%d"),
+                start_date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                end_date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
                 charts="hot-100",
             )
         }

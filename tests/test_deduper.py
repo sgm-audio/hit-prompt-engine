@@ -6,10 +6,10 @@ Covers: dedupe key normalization, fuzzy matching, upsert logic, DB schema.
 """
 
 from ingestion.deduper import (
-    make_dedupe_key,
     fuzzy_find_existing,
-    upsert_track,
     init_db,
+    make_dedupe_key,
+    upsert_track,
 )
 
 
@@ -206,8 +206,8 @@ class TestInitDb:
 
     def test_idempotent_init(self):
         """Calling init_db twice should not raise."""
-        import tempfile
         import os
+        import tempfile
 
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
             path = f.name

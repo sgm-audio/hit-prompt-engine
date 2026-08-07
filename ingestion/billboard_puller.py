@@ -7,14 +7,15 @@ Two data sources:
   - Genre charts: RapidAPI Billboard Charts API (paid, optional)
 """
 
-import os
-import httpx
-import json
-import sqlite3
 import asyncio
+import json
+import os
+import sqlite3
+from collections.abc import Generator
 from datetime import date, timedelta
-from typing import Generator, Optional
 from pathlib import Path
+
+import httpx
 
 # ─── Data Sources ────────────────────────────────────────────────────────────
 
@@ -131,7 +132,7 @@ async def ingest_date_range(
     start = date.fromisoformat(start_date)
     end = date.fromisoformat(end_date)
     chart_list = charts or ["hot-100"]
-    api_key: Optional[str] = os.environ.get("RAPIDAPI_KEY")
+    api_key: str | None = os.environ.get("RAPIDAPI_KEY")
 
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
@@ -167,7 +168,7 @@ async def ingest_date_range(
                     weekly_data["charts"]["hot-100"] = [
                         normalize_hot100_entry(e, week, "hot-100") for e in entries
                     ]
-                except Exception as exc:
+                except (httpx.HTTPError, ValueError, TypeError, KeyError) as exc:
                     print(f"[WARN] Hot-100 failed for {week_str}: {exc}")
 
             # Genre charts (paid, optional)
@@ -199,12 +200,13 @@ async def ingest_date_range(
                             for entry_raw in entries
                         ]
                         await asyncio.sleep(0.2)  # Respect rate limits
-                    except Exception as exc:
+                    except (httpx.HTTPError, ValueError, TypeError, KeyError) as exc:
                         print(f"[WARN] {genre_chart} failed for {week_str}: {exc}")
 
             # Save week (backup JSON)
-            with open(out_file, "w") as f:
-                json.dump(weekly_data, f, indent=2)
+            await asyncio.to_thread(
+                out_file.write_text, json.dumps(weekly_data, indent=2)
+            )
             print(f"[OK] Ingested {week_str}")
 
             await asyncio.sleep(0.1)  # Polite crawl pace

@@ -5,7 +5,7 @@ Tests for prompt_compiler/style_builder.py
 Covers: char limit, genre-first ordering, variation modes, BPM injection, no artist names.
 """
 
-from prompt_compiler.style_builder import build_style_prompt, STYLE_CHAR_LIMIT
+from prompt_compiler.style_builder import STYLE_CHAR_LIMIT, build_style_prompt
 
 
 class TestCharLimit:

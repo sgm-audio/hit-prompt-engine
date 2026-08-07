@@ -5,13 +5,13 @@ Tests for prompt_compiler/variation_engine.py
 Covers: 6-pack generation, BPM deltas, JSON export structure, lint integration.
 """
 
+from prompt_compiler.prompt_linter import lint_prompt
 from prompt_compiler.variation_engine import (
-    generate_prompt_pack,
-    export_prompt_pack_json,
     VARIATION_RECIPES,
     PromptPack,
+    export_prompt_pack_json,
+    generate_prompt_pack,
 )
-from prompt_compiler.prompt_linter import lint_prompt
 
 
 class TestVariationRecipes:
@@ -97,7 +97,7 @@ class TestGeneratePromptPack:
         """V4 stripped should lower BPM by 8."""
         packs = generate_prompt_pack(full_dna)
         v4 = next(p for p in packs if p.variation_id == "V4_stripped")
-        expected_bpm = max(60, int(round(full_dna.bpm - 8)))
+        expected_bpm = max(60, round(full_dna.bpm - 8))
         assert v4.settings.get("bpm") == expected_bpm
 
     def test_bpm_floor_at_60(self):

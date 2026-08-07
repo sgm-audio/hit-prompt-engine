@@ -37,10 +37,10 @@ DB_PATH = os.environ.get("HIT_ENGINE_DB", "hit_engine.db")
 
 
 async def run_phase1(start: str, end: str, charts: list[str] | None = None) -> None:
-    from ingestion.billboard_puller import ingest_date_range
-    from ingestion.deduper import init_db
     from enrichment.musicbrainz_enricher import enrich_catalog
     from enrichment.spotify_features import enrich_with_features
+    from ingestion.billboard_puller import ingest_date_range
+    from ingestion.deduper import init_db
 
     log.info("=== PHASE 1: INGESTION + ENRICHMENT ===")
     log.info(f"Date range: {start} → {end}")
@@ -78,10 +78,11 @@ def run_phase2(
     audio_dir: str = "audio_cache",
     skip_download: bool = False,
 ) -> None:
+    import json
+
     from dna.audio_analyzer import analyze_audio
     from dna.feature_extractor import extract_features
     from dna.theme_extractor import infer_themes
-    import json
 
     log.info("=== PHASE 2: AUDIO DNA EXTRACTION ===")
 
@@ -155,7 +156,7 @@ def run_phase2(
                     instrumentation = json.dumps(features.instrumentation[:5])
                     production_tags = json.dumps(features.production_tags[:4])
                     updated += 1
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 log.warning(f"  Audio analysis failed for {track_id}: {exc}")
                 skipped += 1
         else:

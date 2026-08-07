@@ -16,11 +16,10 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from typing import List
 
 # ─── Block Lists ──────────────────────────────────────────────────────────────
 
-BLOCKED_ARTIST_TERMS: List[str] = [
+BLOCKED_ARTIST_TERMS: list[str] = [
     "taylor swift",
     "beyonce",
     "beyoncé",
@@ -45,7 +44,7 @@ BLOCKED_ARTIST_TERMS: List[str] = [
 ]
 
 # Known iconic lyric fragments to block (seed list — expand over time)
-BLOCKED_LYRIC_FRAGMENTS: List[str] = [
+BLOCKED_LYRIC_FRAGMENTS: list[str] = [
     "i will always love you",
     "thriller thriller night",
     "billie jean is not my lover",
@@ -96,9 +95,9 @@ KNOWN_GENRES = [
 class LintResult:
     passed: bool
     score: float  # 0.0 – 1.0
-    warnings: List[str] = field(default_factory=list)
-    errors: List[str] = field(default_factory=list)
-    suggestions: List[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
+    suggestions: list[str] = field(default_factory=list)
 
     def as_dict(self) -> dict:
         return {
@@ -122,9 +121,9 @@ def lint_prompt(
     Validate a Suno style + lyrics pair.
     Returns LintResult with pass/fail, score, and actionable feedback.
     """
-    warnings: List[str] = []
-    errors: List[str] = []
-    suggestions: List[str] = []
+    warnings: list[str] = []
+    errors: list[str] = []
+    suggestions: list[str] = []
 
     style_lower = style.lower()
     lyrics_lower = lyrics.lower()

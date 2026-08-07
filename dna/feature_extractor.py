@@ -17,7 +17,6 @@ GPU support: set DEVICE='cuda' if torch.cuda.is_available().
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -27,7 +26,7 @@ try:
     from panns_inference import AudioTagging
 
     _DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-    _MODEL: Optional[AudioTagging] = None  # Lazy-loaded singleton
+    _MODEL: AudioTagging | None = None  # Lazy-loaded singleton
 
     def _get_model() -> AudioTagging:
         global _MODEL
@@ -46,10 +45,10 @@ except ImportError:
 
 @dataclass
 class FeatureExtractionResult:
-    instrumentation: List[str] = field(default_factory=list)
-    production_tags: List[str] = field(default_factory=list)
-    mood_tags: List[str] = field(default_factory=list)
-    genre_tags: List[str] = field(default_factory=list)
+    instrumentation: list[str] = field(default_factory=list)
+    production_tags: list[str] = field(default_factory=list)
+    mood_tags: list[str] = field(default_factory=list)
+    genre_tags: list[str] = field(default_factory=list)
     raw_scores: dict = field(default_factory=dict)  # label → prob, top 20
 
 
@@ -117,7 +116,7 @@ _GENRE_KEYWORDS = [
 ]
 
 
-def _classify_tag(tag: str) -> Tuple[Optional[str], str]:
+def _classify_tag(tag: str) -> tuple[str | None, str]:
     """Route a PANNs label to an output category."""
     tag_lower = tag.lower()
     if any(kw in tag_lower for kw in _INSTRUMENT_KEYWORDS):
@@ -154,7 +153,7 @@ def extract_features(
         # PANNs expects 32kHz mono numpy array
         audio, _ = librosa.load(audio_path, sr=32000, mono=True, duration=60)
         audio = audio[None, :]  # Add batch dim: (1, T)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"[ERROR] Could not load audio for ML extraction '{audio_path}': {e}")
         return FeatureExtractionResult()
 
@@ -174,7 +173,7 @@ def extract_features(
     for tag, _ in top_tags:
         category, normalized = _classify_tag(tag)
         if category:
-            bucket: List[str] = getattr(result, category)
+            bucket: list[str] = getattr(result, category)
             if normalized not in bucket:
                 bucket.append(normalized)
 

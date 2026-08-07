@@ -6,7 +6,6 @@ NEVER reads, processes, or references actual song lyrics.
 All inference is from: title keywords, genre, and acoustic features (valence, energy).
 """
 
-from typing import List, Optional
 
 # ─── Title keyword → theme seeds ─────────────────────────────────────────────
 
@@ -26,7 +25,7 @@ _TITLE_RULES: list[tuple[list[str], str]] = [
 # ─── Acoustic feature → theme mapping ────────────────────────────────────────
 
 
-def _valence_energy_theme(valence: float, energy: float) -> Optional[str]:
+def _valence_energy_theme(valence: float, energy: float) -> str | None:
     """Map acoustic vectors to primary emotional theme."""
     if valence >= 0.7 and energy >= 0.7:
         return "confidence"
@@ -62,11 +61,11 @@ _GENRE_THEMES: dict[str, list[str]] = {
 
 def infer_themes(
     title: str,
-    genres: List[str],
-    valence: Optional[float] = None,
-    energy: Optional[float] = None,
+    genres: list[str],
+    valence: float | None = None,
+    energy: float | None = None,
     max_themes: int = 3,
-) -> List[str]:
+) -> list[str]:
     """
     Infer lyric themes from title keywords, genres, and acoustic features.
     Safe: never reads or uses actual lyrics.
@@ -77,9 +76,8 @@ def infer_themes(
 
     # 1. Title keyword inference
     for keywords, theme in _TITLE_RULES:
-        if any(kw in title_lower for kw in keywords):
-            if theme not in themes:
-                themes.append(theme)
+        if any(kw in title_lower for kw in keywords) and theme not in themes:
+            themes.append(theme)
 
     # 2. Acoustic feature inference
     if valence is not None and energy is not None:

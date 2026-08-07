@@ -6,7 +6,8 @@ Validates the auto-scoring engine against known good/bad prompt packs.
 """
 
 import pytest
-from prompt_compiler.scorer import score_pack, score_all_packs, ScoreResult
+
+from prompt_compiler.scorer import ScoreResult, score_all_packs, score_pack
 from prompt_compiler.variation_engine import generate_prompt_pack
 
 

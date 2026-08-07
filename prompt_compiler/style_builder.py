@@ -11,7 +11,7 @@ NEVER injects artist names, song titles, or any copyrightable content.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from dna.dna_schema import TrackDNA
@@ -83,7 +83,7 @@ VOCAL_MAP: dict[str, str] = {
 # ─── Main Style Builder ───────────────────────────────────────────────────────
 
 
-def build_style_prompt(dna: "TrackDNA", variation: str = "faithful") -> str:
+def build_style_prompt(dna: TrackDNA, variation: str = "faithful") -> str:
     """
     Builds a Suno-optimized Style field (max 200 chars).
     Never includes artist names or song titles.
@@ -98,7 +98,7 @@ def build_style_prompt(dna: "TrackDNA", variation: str = "faithful") -> str:
     primary_genre = GENRE_TAG_MAP.get(primary_genre_key, primary_genre_key)
 
     # Build parts list
-    parts: List[str] = []
+    parts: list[str] = []
 
     if variation == "faithful":
         parts.append(primary_genre)

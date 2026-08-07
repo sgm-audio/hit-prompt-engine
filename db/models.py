@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import (
     DateTime,
@@ -24,7 +23,7 @@ from sqlalchemy import (
     create_engine,
     event,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///hit_engine.db")
 
@@ -62,43 +61,43 @@ class Track(Base):
     track_id: Mapped[str] = mapped_column(String(32), primary_key=True)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     artist: Mapped[str] = mapped_column(String(255), nullable=False)
-    release_year: Mapped[Optional[int]] = mapped_column(Integer)
+    release_year: Mapped[int | None] = mapped_column(Integer)
 
     # ── External IDs ────────────────────────────────────────────────────────
-    mbid: Mapped[Optional[str]] = mapped_column(String(36))  # MusicBrainz
-    isrc: Mapped[Optional[str]] = mapped_column(String(12))
-    spotify_id: Mapped[Optional[str]] = mapped_column(String(22))
+    mbid: Mapped[str | None] = mapped_column(String(36))  # MusicBrainz
+    isrc: Mapped[str | None] = mapped_column(String(12))
+    spotify_id: Mapped[str | None] = mapped_column(String(22))
 
     # ── Genre / tags (JSON arrays stored as text) ───────────────────────────
-    genres: Mapped[Optional[str]] = mapped_column(Text)  # JSON list
-    mb_genres: Mapped[Optional[str]] = mapped_column(Text)  # JSON list
+    genres: Mapped[str | None] = mapped_column(Text)  # JSON list
+    mb_genres: Mapped[str | None] = mapped_column(Text)  # JSON list
 
     # ── Chart performance ────────────────────────────────────────────────────
-    peak_position: Mapped[Optional[int]] = mapped_column(Integer)
-    weeks_on_chart: Mapped[Optional[int]] = mapped_column(Integer)
-    chart_source: Mapped[Optional[str]] = mapped_column(String(64))
+    peak_position: Mapped[int | None] = mapped_column(Integer)
+    weeks_on_chart: Mapped[int | None] = mapped_column(Integer)
+    chart_source: Mapped[str | None] = mapped_column(String(64))
 
     # ── Spotify audio features ───────────────────────────────────────────────
-    bpm: Mapped[Optional[float]] = mapped_column(Float)
-    key: Mapped[Optional[str]] = mapped_column(String(16))  # "F# minor"
-    mode: Mapped[Optional[str]] = mapped_column(String(8))  # "major"|"minor"
-    energy: Mapped[Optional[float]] = mapped_column(Float)
-    valence: Mapped[Optional[float]] = mapped_column(Float)
-    danceability: Mapped[Optional[float]] = mapped_column(Float)
-    acousticness: Mapped[Optional[float]] = mapped_column(Float)
-    instrumentalness: Mapped[Optional[float]] = mapped_column(Float)
-    duration_ms: Mapped[Optional[int]] = mapped_column(Integer)
+    bpm: Mapped[float | None] = mapped_column(Float)
+    key: Mapped[str | None] = mapped_column(String(16))  # "F# minor"
+    mode: Mapped[str | None] = mapped_column(String(8))  # "major"|"minor"
+    energy: Mapped[float | None] = mapped_column(Float)
+    valence: Mapped[float | None] = mapped_column(Float)
+    danceability: Mapped[float | None] = mapped_column(Float)
+    acousticness: Mapped[float | None] = mapped_column(Float)
+    instrumentalness: Mapped[float | None] = mapped_column(Float)
+    duration_ms: Mapped[int | None] = mapped_column(Integer)
 
     # ── Deep audio DNA (Phase 2 librosa + PANNs) ─────────────────────────────
-    structure: Mapped[Optional[str]] = mapped_column(Text)  # JSON list of sections
-    energy_curve: Mapped[Optional[str]] = mapped_column(Text)  # JSON list[float] 10pt
-    instrumentation: Mapped[Optional[str]] = mapped_column(Text)  # JSON list[str]
-    production_tags: Mapped[Optional[str]] = mapped_column(Text)  # JSON list[str]
-    vocal_profile: Mapped[Optional[str]] = mapped_column(String(32))
+    structure: Mapped[str | None] = mapped_column(Text)  # JSON list of sections
+    energy_curve: Mapped[str | None] = mapped_column(Text)  # JSON list[float] 10pt
+    instrumentation: Mapped[str | None] = mapped_column(Text)  # JSON list[str]
+    production_tags: Mapped[str | None] = mapped_column(Text)  # JSON list[str]
+    vocal_profile: Mapped[str | None] = mapped_column(String(32))
 
     # ── Safe inference (no actual lyrics) ────────────────────────────────────
-    lyric_themes: Mapped[Optional[str]] = mapped_column(Text)  # JSON list[str]
-    uniqueness_hooks: Mapped[Optional[str]] = mapped_column(Text)  # JSON list[str]
+    lyric_themes: Mapped[str | None] = mapped_column(Text)  # JSON list[str]
+    uniqueness_hooks: Mapped[str | None] = mapped_column(Text)  # JSON list[str]
 
     # ── Meta ────────────────────────────────────────────────────────────────
     analysis_version: Mapped[str] = mapped_column(String(16), default="2.0")

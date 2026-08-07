@@ -10,7 +10,6 @@ mirror that provides audio features data reliably in 2026.
 
 import asyncio
 import sqlite3
-from typing import Optional
 
 import httpx
 
@@ -40,7 +39,7 @@ async def get_spotify_track_id(
     client: httpx.AsyncClient,
     title: str,
     artist: str,
-) -> Optional[str]:
+) -> str | None:
     """Search for Spotify track ID via title + artist."""
     url = f"https://{HOST}/search/"
     params = {"q": f"{title} {artist}", "type": "tracks", "offset": "0", "limit": "1"}
@@ -50,7 +49,7 @@ async def get_spotify_track_id(
         items = r.json().get("tracks", {}).get("items", [])
         if items:
             return items[0].get("id")
-    except Exception as e:
+    except (httpx.HTTPError, ValueError, TypeError, KeyError) as e:
         print(f"[WARN] Spotify search failed for '{title}' by '{artist}': {e}")
     return None
 
@@ -58,7 +57,7 @@ async def get_spotify_track_id(
 async def fetch_audio_features(
     client: httpx.AsyncClient,
     spotify_id: str,
-) -> Optional[dict]:
+) -> dict | None:
     """Fetch audio features for a Spotify track ID."""
     url = f"https://{HOST}/audio-features/"
     params = {"ids": spotify_id}
@@ -80,7 +79,7 @@ async def fetch_audio_features(
             "instrumentalness": data.get("instrumentalness"),
             "duration_ms": data.get("duration_ms"),
         }
-    except Exception as e:
+    except (httpx.HTTPError, ValueError, TypeError, KeyError) as e:
         print(f"[WARN] Audio features failed for id={spotify_id}: {e}")
     return None
 
@@ -111,8 +110,9 @@ def enrich_with_features(
         try:
             conn.execute(f"ALTER TABLE tracks ADD COLUMN {col_def}")
             conn.commit()
-        except Exception:  # nosec B110
-            pass
+        except sqlite3.OperationalError as exc:
+            if "duplicate column name" not in str(exc).lower():
+                raise
 
     tracks = conn.execute(
         """
