@@ -263,8 +263,6 @@ def score_pack(
     )
 
 
-def score_all_packs(
-    packs: list[PromptPack], dna: TrackDNA
-) -> dict[str, ScoreResult]:
+def score_all_packs(packs: list[PromptPack], dna: TrackDNA) -> dict[str, ScoreResult]:
     """Score all 6 variations. Returns {variation_id: ScoreResult}."""
     return {pack.variation_id: score_pack(pack, dna, all_packs=packs) for pack in packs}

@@ -6,7 +6,6 @@ the entire pipeline. Phase 1 fields populate from chart metadata + MusicBrainz.
 Phase 2 fields populate from Spotify audio features + deep audio analysis.
 """
 
-
 from pydantic import BaseModel, Field
 
 
@@ -53,9 +52,7 @@ class TrackDNA(BaseModel):
     production_tags: list[str] = Field(
         default_factory=list
     )  # e.g., ["gated_reverb", "sidechain"]
-    vocal_profile: str | None = (
-        None  # "male_lead", "female_harmony", "rap", "layered"
-    )
+    vocal_profile: str | None = None  # "male_lead", "female_harmony", "rap", "layered"
 
     # ── Safe Inference ────────────────────────────────────────────────────────
     lyric_themes: list[str] = Field(

@@ -5,7 +5,6 @@ Normalizes raw genre strings from MusicBrainz / Spotify into canonical genre key
 Maps messy free-text genre strings like "hip hop/rap" → "hip_hop".
 """
 
-
 # Ordered by priority (more specific first)
 _GENRE_RULES: list[tuple[list[str], str]] = [
     (["k-pop", "kpop", "korean pop"], "kpop"),
