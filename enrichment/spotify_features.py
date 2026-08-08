@@ -49,7 +49,7 @@ async def get_spotify_track_id(
         items = r.json().get("tracks", {}).get("items", [])
         if items:
             return items[0].get("id")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"[WARN] Spotify search failed for '{title}' by '{artist}': {e}")
     return None
 
@@ -79,7 +79,7 @@ async def fetch_audio_features(
             "instrumentalness": data.get("instrumentalness"),
             "duration_ms": data.get("duration_ms"),
         }
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"[WARN] Audio features failed for id={spotify_id}: {e}")
     return None
 
@@ -110,8 +110,8 @@ def enrich_with_features(
         try:
             conn.execute(f"ALTER TABLE tracks ADD COLUMN {col_def}")
             conn.commit()
-        except Exception:  # nosec B110
-            pass
+        except sqlite3.OperationalError:
+            continue
 
     tracks = conn.execute(
         """

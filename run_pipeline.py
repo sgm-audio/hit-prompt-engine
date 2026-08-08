@@ -156,7 +156,7 @@ def run_phase2(
                     instrumentation = json.dumps(features.instrumentation[:5])
                     production_tags = json.dumps(features.production_tags[:4])
                     updated += 1
-            except Exception as exc:
+            except Exception as exc:  # noqa: BLE001
                 log.warning(f"  Audio analysis failed for {track_id}: {exc}")
                 skipped += 1
         else:

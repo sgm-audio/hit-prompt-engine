@@ -76,9 +76,8 @@ def infer_themes(
 
     # 1. Title keyword inference
     for keywords, theme in _TITLE_RULES:
-        if any(kw in title_lower for kw in keywords):
-            if theme not in themes:
-                themes.append(theme)
+        if any(kw in title_lower for kw in keywords) and theme not in themes:
+            themes.append(theme)
 
     # 2. Acoustic feature inference
     if valence is not None and energy is not None:

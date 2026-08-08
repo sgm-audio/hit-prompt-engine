@@ -84,7 +84,7 @@ def segment_structure(y: np.ndarray, sr: int) -> list[str]:
     try:
         bounds = librosa.segment.agglomerative(oenv, k=min(8, max(3, len(oenv) // 50)))
         num_segments = len(bounds)
-    except Exception:
+    except Exception:  # noqa: BLE001
         num_segments = 5  # Fallback
 
     # Map segment count to plausible structure
@@ -124,13 +124,13 @@ def analyze_audio(audio_path: str) -> AudioAnalysisResult | None:
     try:
         # Load mono, 22kHz, max 3 minutes (enough for structural analysis)
         y, sr = librosa.load(audio_path, sr=22050, duration=180, mono=True)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"[ERROR] Could not load audio '{audio_path}': {e}")
         return None
 
     # BPM
     tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
-    bpm = int(round(float(tempo)))
+    bpm = round(float(tempo))
 
     # Key
     key, mode = estimate_key(y, sr)

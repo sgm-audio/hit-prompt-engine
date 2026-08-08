@@ -168,7 +168,7 @@ async def ingest_date_range(
                     weekly_data["charts"]["hot-100"] = [
                         normalize_hot100_entry(e, week, "hot-100") for e in entries
                     ]
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001
                     print(f"[WARN] Hot-100 failed for {week_str}: {exc}")
 
             # Genre charts (paid, optional)
@@ -200,11 +200,11 @@ async def ingest_date_range(
                             for entry_raw in entries
                         ]
                         await asyncio.sleep(0.2)  # Respect rate limits
-                    except Exception as exc:
+                    except Exception as exc:  # noqa: BLE001
                         print(f"[WARN] {genre_chart} failed for {week_str}: {exc}")
 
             # Save week (backup JSON)
-            with open(out_file, "w") as f:
+            with open(out_file, "w") as f:  # noqa: ASYNC230
                 json.dump(weekly_data, f, indent=2)
             print(f"[OK] Ingested {week_str}")
 

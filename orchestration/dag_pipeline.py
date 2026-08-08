@@ -15,7 +15,7 @@ from __future__ import annotations
 import asyncio
 import os
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 
 from dagster import (
     AssetExecutionContext,
@@ -165,7 +165,7 @@ def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) ->
                         context.log.warning(
                             f"Audio analysis returned None for {track_id}"
                         )
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001
                     context.log.warning(f"Audio analysis failed for {track_id}: {exc}")
                 break
 
@@ -241,7 +241,7 @@ def prompts_compiled(context: AssetExecutionContext) -> int:
             if passing < 4:
                 lint_failures += 1
             compiled += 1
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001
             context.log.warning(f"Compile failed for {d.get('track_id')}: {exc}")
 
     conn.close()
@@ -283,8 +283,8 @@ weekly_ingestion = ScheduleDefinition(
     run_config=RunConfig(
         ops={
             "billboard_ingested": Phase1Config(
-                start_date=datetime.utcnow().strftime("%Y-%m-%d"),
-                end_date=datetime.utcnow().strftime("%Y-%m-%d"),
+                start_date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                end_date=datetime.now(timezone.utc).strftime("%Y-%m-%d"),
                 charts="hot-100",
             )
         }

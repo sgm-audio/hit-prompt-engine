@@ -153,7 +153,7 @@ def extract_features(
         # PANNs expects 32kHz mono numpy array
         audio, _ = librosa.load(audio_path, sr=32000, mono=True, duration=60)
         audio = audio[None, :]  # Add batch dim: (1, T)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         print(f"[ERROR] Could not load audio for ML extraction '{audio_path}': {e}")
         return FeatureExtractionResult()
 

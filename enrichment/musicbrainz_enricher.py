@@ -98,8 +98,8 @@ def enrich_catalog(
         try:
             conn.execute(f"ALTER TABLE tracks ADD COLUMN {col_def}")
             conn.commit()
-        except Exception:  # nosec B110
-            pass  # Column already exists
+        except sqlite3.OperationalError:
+            continue  # Column already exists
 
     query = "SELECT track_id, title, artist FROM tracks WHERE enriched = 0 OR enriched IS NULL"
     if limit:
