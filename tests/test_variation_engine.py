@@ -5,13 +5,13 @@ Tests for prompt_compiler/variation_engine.py
 Covers: 6-pack generation, BPM deltas, JSON export structure, lint integration.
 """
 
+from prompt_compiler.prompt_linter import lint_prompt
 from prompt_compiler.variation_engine import (
-    generate_prompt_pack,
-    export_prompt_pack_json,
     VARIATION_RECIPES,
     PromptPack,
+    export_prompt_pack_json,
+    generate_prompt_pack,
 )
-from prompt_compiler.prompt_linter import lint_prompt
 
 
 class TestVariationRecipes:

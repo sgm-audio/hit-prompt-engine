@@ -5,8 +5,7 @@ Tests for prompt_compiler/prompt_linter.py
 Covers: char limits, artist blocking, section tags, BPM check, scoring.
 """
 
-from prompt_compiler.prompt_linter import lint_prompt, STYLE_CHAR_LIMIT
-
+from prompt_compiler.prompt_linter import STYLE_CHAR_LIMIT, lint_prompt
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
 

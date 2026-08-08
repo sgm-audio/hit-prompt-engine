@@ -14,10 +14,10 @@ HARD RULES (enforced by MB Terms of Service):
   - Exceeding rate limit risks IP block
 """
 
-import time
 import sqlite3
+import time
+
 import httpx
-from typing import Optional
 
 MB_BASE = "https://musicbrainz.org/ws/2"
 USER_AGENT = "HitPromptEngine/1.0 (contact@sgm-studios.com)"  # ← Update this
@@ -30,7 +30,7 @@ def mb_search_recording(
     client: httpx.Client,
     title: str,
     artist: str,
-) -> Optional[dict]:
+) -> dict | None:
     """
     Search MusicBrainz for a recording by title + artist.
     Returns normalized metadata or None.
@@ -62,7 +62,7 @@ def mb_search_recording(
     }
 
 
-def _extract_year(recording: dict) -> Optional[int]:
+def _extract_year(recording: dict) -> int | None:
     """Pull earliest release year from recording releases."""
     releases = recording.get("releases", [])
     years = []
@@ -81,7 +81,7 @@ def _extract_year(recording: dict) -> Optional[int]:
 
 def enrich_catalog(
     db_path: str = "data/canonical_tracks.db",
-    limit: Optional[int] = None,
+    limit: int | None = None,
 ):
     """
     Enrich all unenriched tracks in the catalog with MusicBrainz data.

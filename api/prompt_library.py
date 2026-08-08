@@ -15,20 +15,19 @@ Endpoints:
 
 from __future__ import annotations
 
-import sqlite3
 import json
 import os
+import sqlite3
 from contextlib import asynccontextmanager
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from dna.dna_schema import TrackDNA
 from prompt_compiler.prompt_linter import lint_prompt
 from prompt_compiler.variation_engine import export_prompt_pack_json
-from dna.dna_schema import TrackDNA
-
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -80,7 +79,7 @@ def get_db() -> sqlite3.Connection:
     return conn
 
 
-def row_to_dict(row: sqlite3.Row) -> Dict[str, Any]:
+def row_to_dict(row: sqlite3.Row) -> dict[str, Any]:
     return dict(row)
 
 
@@ -96,27 +95,27 @@ class LintRequest(BaseModel):
 class LintResponse(BaseModel):
     passed: bool
     score: float
-    warnings: List[str]
-    errors: List[str]
-    suggestions: List[str]
+    warnings: list[str]
+    errors: list[str]
+    suggestions: list[str]
 
 
 class TrackSummary(BaseModel):
     track_id: str
     title: str
     artist: str
-    release_year: Optional[int]
-    genres: List[str]
-    bpm: Optional[float]
-    peak_position: Optional[int]
-    weeks_on_chart: Optional[int]
+    release_year: int | None
+    genres: list[str]
+    bpm: float | None
+    peak_position: int | None
+    weeks_on_chart: int | None
 
 
 class CatalogPage(BaseModel):
     total: int
     page: int
     per_page: int
-    results: List[TrackSummary]
+    results: list[TrackSummary]
 
 
 # ─── Endpoints ────────────────────────────────────────────────────────────────
@@ -129,17 +128,17 @@ def health():
 
 @app.get("/tracks", response_model=CatalogPage)
 def search_tracks(
-    q: Optional[str] = Query(None, description="Search title or artist"),
-    genre: Optional[str] = Query(None, description="Filter by canonical genre"),
-    year_from: Optional[int] = Query(None),
-    year_to: Optional[int] = Query(None),
+    q: str | None = Query(None, description="Search title or artist"),
+    genre: str | None = Query(None, description="Filter by canonical genre"),
+    year_from: int | None = Query(None),
+    year_to: int | None = Query(None),
     page: int = Query(1, ge=1),
     per_page: int = Query(20, ge=1, le=100),
 ):
     conn = get_db()
     try:
         where_clauses = []
-        params: List[Any] = []
+        params: list[Any] = []
 
         if q:
             where_clauses.append("(LOWER(title) LIKE ? OR LOWER(artist) LIKE ?)")
@@ -184,7 +183,7 @@ def search_tracks(
 
 
 @app.get("/tracks/{track_id}")
-def get_track(track_id: str) -> Dict[str, Any]:
+def get_track(track_id: str) -> dict[str, Any]:
     conn = get_db()
     try:
         row = conn.execute(
@@ -213,7 +212,7 @@ def get_track(track_id: str) -> Dict[str, Any]:
 
 
 @app.get("/prompts/{track_id}")
-def get_prompt_pack(track_id: str) -> Dict[str, Any]:
+def get_prompt_pack(track_id: str) -> dict[str, Any]:
     conn = get_db()
     try:
         row = conn.execute(
@@ -266,7 +265,7 @@ def lint_on_demand(req: LintRequest) -> LintResponse:
 
 
 @app.get("/stats")
-def catalog_stats() -> Dict[str, Any]:
+def catalog_stats() -> dict[str, Any]:
     conn = get_db()
     try:
         total = conn.execute("SELECT COUNT(*) as cnt FROM tracks").fetchone()["cnt"]

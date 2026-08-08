@@ -10,7 +10,6 @@ mirror that provides audio features data reliably in 2026.
 
 import asyncio
 import sqlite3
-from typing import Optional
 
 import httpx
 
@@ -40,7 +39,7 @@ async def get_spotify_track_id(
     client: httpx.AsyncClient,
     title: str,
     artist: str,
-) -> Optional[str]:
+) -> str | None:
     """Search for Spotify track ID via title + artist."""
     url = f"https://{HOST}/search/"
     params = {"q": f"{title} {artist}", "type": "tracks", "offset": "0", "limit": "1"}
@@ -58,7 +57,7 @@ async def get_spotify_track_id(
 async def fetch_audio_features(
     client: httpx.AsyncClient,
     spotify_id: str,
-) -> Optional[dict]:
+) -> dict | None:
     """Fetch audio features for a Spotify track ID."""
     url = f"https://{HOST}/audio-features/"
     params = {"ids": spotify_id}

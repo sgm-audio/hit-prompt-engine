@@ -12,19 +12,19 @@ Or via docker compose --profile orchestration up
 
 from __future__ import annotations
 
+import asyncio
 import os
 import sqlite3
-import asyncio
 from datetime import datetime
 
 from dagster import (
     AssetExecutionContext,
+    Config,
     Definitions,
     RunConfig,
     ScheduleDefinition,
     asset,
     define_asset_job,
-    Config,
 )
 
 DB_PATH = os.environ.get("HIT_ENGINE_DB", "hit_engine.db")
@@ -113,10 +113,11 @@ def spotify_enriched(context: AssetExecutionContext) -> int:
 )
 def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) -> int:
     import json
+    from pathlib import Path
+
     from dna.audio_analyzer import analyze_audio
     from dna.feature_extractor import extract_features
     from dna.theme_extractor import infer_themes
-    from pathlib import Path
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -196,9 +197,10 @@ def audio_dna_extracted(context: AssetExecutionContext, config: Phase2Config) ->
 )
 def prompts_compiled(context: AssetExecutionContext) -> int:
     import json
+
     from dna.dna_schema import TrackDNA
-    from prompt_compiler.variation_engine import export_prompt_pack_json
     from prompt_compiler.prompt_linter import lint_prompt
+    from prompt_compiler.variation_engine import export_prompt_pack_json
 
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row

@@ -8,12 +8,11 @@ Deduplication strategy:
   3. Fuzzy artist+title match (rapidfuzz, 90% threshold)
 """
 
-import json
-import sqlite3
 import hashlib
+import json
 import re
+import sqlite3
 from pathlib import Path
-from typing import Optional
 
 from rapidfuzz import fuzz
 
@@ -86,7 +85,7 @@ def fuzzy_find_existing(
     title: str,
     artist: str,
     threshold: int = 90,
-) -> Optional[str]:
+) -> str | None:
     """Return track_id if a fuzzy match exists above threshold."""
     key = make_dedupe_key(title, artist)
     cursor = conn.execute("SELECT track_id, dedupe_key FROM tracks")
@@ -106,8 +105,8 @@ def upsert_track(
     rank: int,
     peak_position: int,
     weeks_on_chart: int,
-    isrc: Optional[str] = None,
-    release_year: Optional[int] = None,
+    isrc: str | None = None,
+    release_year: int | None = None,
 ) -> str:
     """Insert or update a track; return track_id."""
     # Check for fuzzy duplicate

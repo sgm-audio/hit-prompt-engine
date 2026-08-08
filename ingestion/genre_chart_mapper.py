@@ -5,9 +5,9 @@ Maps Billboard genre chart names to canonical genre labels.
 Used when populating genre metadata from chart source data.
 """
 
-import yaml
 from pathlib import Path
-from typing import Optional
+
+import yaml
 
 _taxonomy: dict = {}
 
@@ -40,7 +40,7 @@ CHART_TO_GENRE: dict[str, str] = {
 }
 
 
-def chart_to_canonical_genre(chart_name: str) -> Optional[str]:
+def chart_to_canonical_genre(chart_name: str) -> str | None:
     """Map a chart name to a canonical genre key."""
     return CHART_TO_GENRE.get(chart_name)
 

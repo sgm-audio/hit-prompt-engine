@@ -5,6 +5,7 @@ Tests for enrichment/genre_normalizer.py
 """
 
 import pytest
+
 from enrichment.genre_normalizer import normalize_genre, normalize_genres
 
 

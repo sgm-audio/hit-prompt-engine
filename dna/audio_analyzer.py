@@ -16,7 +16,6 @@ Delete preview audio immediately after analysis in production.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -36,8 +35,8 @@ class AudioAnalysisResult:
     bpm: int
     key: str
     mode: str  # "Major" | "Minor"
-    structure: List[str]
-    energy_curve: List[float]  # 10-point normalized energy
+    structure: list[str]
+    energy_curve: list[float]  # 10-point normalized energy
     duration_s: float
     rms_mean: float = 0.0  # Average loudness proxy
 
@@ -50,7 +49,7 @@ _MAJOR_TEMPLATE = np.array([1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1], dtype=float)
 _MINOR_TEMPLATE = np.array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0], dtype=float)
 
 
-def estimate_key(y: "np.ndarray", sr: int) -> Tuple[str, str]:
+def estimate_key(y: np.ndarray, sr: int) -> tuple[str, str]:
     """Estimate musical key and mode from chroma features (Krumhansl-Schmuckler)."""
     chroma = librosa.feature.chroma_stft(y=y, sr=sr)
     chroma_mean = np.mean(chroma, axis=1)
@@ -73,7 +72,7 @@ def estimate_key(y: "np.ndarray", sr: int) -> Tuple[str, str]:
 # ─── Structure Detection ──────────────────────────────────────────────────────
 
 
-def segment_structure(y: "np.ndarray", sr: int) -> List[str]:
+def segment_structure(y: np.ndarray, sr: int) -> list[str]:
     """
     Energy-heuristic structural segmentation.
     Returns labeled section list. For production, replace with an ML segmenter.
@@ -112,7 +111,7 @@ def segment_structure(y: "np.ndarray", sr: int) -> List[str]:
 # ─── Main Analyzer ────────────────────────────────────────────────────────────
 
 
-def analyze_audio(audio_path: str) -> Optional[AudioAnalysisResult]:
+def analyze_audio(audio_path: str) -> AudioAnalysisResult | None:
     """
     Full audio analysis pipeline.
     Loads audio, extracts BPM, key, structure, energy curve.
