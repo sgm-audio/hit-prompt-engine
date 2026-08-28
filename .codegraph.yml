@@ -1,0 +1,16 @@
+baseline:
+  backend: local
+critical_paths: []
+dead_code:
+  entry_point_decorators: []
+  entry_point_files: []
+  entry_point_names: []
+default_branch: main
+ignore: []
+install_hook: false
+languages:
+- python
+- typescript
+- javascript
+register_mcp: false
+version: 1

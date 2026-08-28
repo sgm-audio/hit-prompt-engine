@@ -201,7 +201,7 @@ def build_canonical_catalog(
 
     count = conn.execute("SELECT COUNT(*) FROM tracks").fetchone()[0]
     print(
-        f"\n✅ Canonical catalog built: {count:,} unique tracks from {total_entries:,} entries"
+        f"\nCanonical catalog built: {count:,} unique tracks from {total_entries:,} entries"
     )
     conn.close()
 

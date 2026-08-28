@@ -106,7 +106,7 @@ def enrich_catalog(
         query += f" LIMIT {limit}"
 
     tracks = conn.execute(query).fetchall()
-    print(f"🔍 Enriching {len(tracks):,} tracks via MusicBrainz...")
+    print(f"Enriching {len(tracks):,} tracks via MusicBrainz...")
 
     with httpx.Client() as client:
         for i, (track_id, title, artist) in enumerate(tracks):
@@ -147,7 +147,7 @@ def enrich_catalog(
             if i % 100 == 0:
                 print(f"  [{i}/{len(tracks)}] Enriched: {artist} — {title}")
 
-            # ✅ Enforce 1 req/sec hard limit
+            # Enforce 1 req/sec hard limit
             elapsed = time.monotonic() - t_start
             sleep_time = max(0, 1.0 - elapsed)
             time.sleep(sleep_time)
@@ -155,7 +155,7 @@ def enrich_catalog(
     enriched_count = conn.execute(
         "SELECT COUNT(*) FROM tracks WHERE enriched = 1"
     ).fetchone()[0]
-    print(f"\n✅ Enrichment complete: {enriched_count:,} tracks enriched")
+    print(f"\nEnrichment complete: {enriched_count:,} tracks enriched")
     conn.close()
     return enriched_count
 

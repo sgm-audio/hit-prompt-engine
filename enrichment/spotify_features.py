@@ -123,7 +123,7 @@ def enrich_with_features(
         (batch_size,),
     ).fetchall()
 
-    print(f"🎵 Fetching Spotify features for {len(tracks):,} tracks...")
+    print(f"Fetching Spotify features for {len(tracks):,} tracks...")
 
     async def _run():
         async with httpx.AsyncClient() as client:
@@ -179,7 +179,7 @@ def enrich_with_features(
     enriched = conn.execute(
         "SELECT COUNT(*) FROM tracks WHERE spotify_features_enriched = 1"
     ).fetchone()[0]
-    print(f"\n✅ Spotify features done: {enriched:,} tracks enriched")
+    print(f"\nSpotify features done: {enriched:,} tracks enriched")
     conn.close()
     return enriched
 
