@@ -29,7 +29,7 @@ alembic>=1.13.0
 
 # ─── Orchestration (optional) ─────────────────────────────────────────────────
 dagster>=1.13.16
-dagster-webserver>=1.7.0
+dagster-webserver>=1.13.21
 
 # ─── Utilities ────────────────────────────────────────────────────────────────
 python-dotenv>=1.2.2
