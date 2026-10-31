@@ -1,6 +1,6 @@
 # Contributing
 
-See [CONTRIBUTING.md](https://github.com/sgm/hit-prompt-engine/blob/main/CONTRIBUTING.md)
+See [CONTRIBUTING.md](https://github.com/sgm-audio/hit-prompt-engine/blob/main/CONTRIBUTING.md)
 in the repository root for full instructions.
 
 ## Quick checklist
