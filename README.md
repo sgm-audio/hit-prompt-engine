@@ -6,7 +6,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Docs](https://img.shields.io/badge/docs-github--pages-blueviolet)](https://sgm-audio.github.io/hit-prompt-engine)
 
-A data pipeline that turns 50 years of Billboard chart history into Suno-optimized prompt packs — copyright-safe, DNA-driven, six variations per track.
+A data pipeline that takes Billboard chart history (1976–2026) and turns it into Suno prompt packs, with six variations per track. The prompt linter blocks artist names and flags known lyric fragments. That lowers the copyright risk, but it's a check, not a guarantee.
 
 > **No Suno API calls.** This tool generates optimized prompts and manages track DNA. You paste the output into Suno Custom Mode.
 
@@ -182,7 +182,7 @@ curl http://localhost:8000/prompts/abc123def456 | jq '.variations[0]'
 
 ## Copyright Safety
 
-This engine is designed from the ground up to be rights-safe:
+What the code does to keep prompts away from copyrighted material (it lowers the risk, it doesn't remove it):
 
 - **No artist name injection** — style fields never contain artist names
 - **No lyric copying** — `theme_extractor.py` infers from title keywords and acoustic features only; it never reads or references actual song lyrics

@@ -25,4 +25,8 @@ pip install -r requirements.txt
 
 ## Known issues
 
-See [AGENTS.md](./AGENTS.md) for integration breakages between orchestration and ingestion modules.
+- The four caller/callee signature mismatches between orchestration and ingestion were fixed in v0.1.0 (see CHANGELOG).
+- `db/models.py` (SQLAlchemy) isn't imported anywhere yet. All DB access is raw `sqlite3` in `ingestion/deduper.py`.
+- The `slow`, `integration` and `unit` markers in `pytest.ini` aren't used by any test.
+- No audio downloader exists. Put files in `audio_cache/{track_id}.mp3` (or .wav/.flac/.m4a) yourself. Without audio, themes come from title/genre/valence/energy only.
+- No tests yet for `audio_analyzer`, `feature_extractor`, `billboard_puller`, `musicbrainz_enricher`, `spotify_features`, `lyrics_builder`, `dag_pipeline`, `run_pipeline` or `api/prompt_library`.

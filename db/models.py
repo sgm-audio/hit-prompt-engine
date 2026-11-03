@@ -1,7 +1,7 @@
 """
 db/models.py
 
-SQLAlchemy ORM models — production-grade upgrade path from raw SQLite.
+SQLAlchemy ORM models, the planned replacement for the raw SQLite layer.
 Use this when migrating from direct sqlite3 calls to a managed schema.
 
 Switch DB via DATABASE_URL env var:
