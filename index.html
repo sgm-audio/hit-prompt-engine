@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -29,10 +29,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -580,8 +580,9 @@
 
 
 <h1 id="hit-prompt-engine">Hit Prompt Engine</h1>
-<p>A data pipeline that turns 50 years of Billboard chart history into Suno-optimized
-prompt packs — copyright-safe, DNA-driven, six variations per track.</p>
+<p>A data pipeline that takes Billboard chart history (1976–2026) and turns it into Suno
+prompt packs, with six variations per track. The prompt linter blocks artist names and
+flags known lyric fragments. That's a check, not a copyright guarantee.</p>
 <p><strong>No Suno API calls.</strong> This tool generates optimized prompts and manages track DNA.
 You paste the output into Suno Custom Mode.</p>
 <hr />
@@ -592,7 +593,7 @@ Writing these by hand for bulk creation is tedious and inconsistent. This engine
 <li>Ingests Billboard chart metadata (1976–present)</li>
 <li>Enriches it with MusicBrainz IDs / Spotify audio features</li>
 <li>Runs audio analysis via librosa + PANNs (BPM, key, structure, instrumentation)</li>
-<li>Compiles 6 copyright-safe variations per track</li>
+<li>Compiles 6 variations per track and lints them for artist names and lyric fragments</li>
 <li>Scores each pack with a Pat Pattison–inspired linter</li>
 </ol>
 <h2 id="quick-links">Quick links</h2>
@@ -651,10 +652,10 @@ Writing these by hand for bulk creation is tedious and inconsistent. This engine
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.indexes", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.indexes", "content.code.copy"], "search": "assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="assets/javascripts/bundle.c21346df.min.js"></script>
       
     
   </body>
